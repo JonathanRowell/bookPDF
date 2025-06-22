@@ -11,3 +11,6 @@
 
 # ignore (for now) the font files
 /fonts
+
+# ignore the node modules
+/node_modules

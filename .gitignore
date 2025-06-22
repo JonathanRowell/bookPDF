@@ -1,0 +1,13 @@
+# .gitignore file
+
+# Ignore poetry files
+/data
+
+# Ignore the temp files
+/tmp
+
+# ignore the built PDF file
+/pdf
+
+# ignore (for now) the font files
+/fonts

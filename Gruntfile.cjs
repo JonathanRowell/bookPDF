@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 	
 	clean: {
 		build: {
-			src: ['src','tmp','pdf','fonts']
+			src: ['tmp','pdf','fonts']
 		}
 	},
 	
@@ -46,7 +46,7 @@ module.exports = function(grunt) {
 		}
 	},
 	exec: {
-        spell: "node spellcheck.js",
+        spell: "node src/spellcheck.js",
 		build: "node makePDF.js"
     }
   });

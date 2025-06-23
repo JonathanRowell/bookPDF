@@ -79,7 +79,7 @@ function countSpaceGaps(line) {
 function prepareIgnoreWords() {
 	var list = []; //perhaps
 	// open the ignore.txt file (it is in UTF-8)
-	var reader = new nReadlines(path.join('./src','ignore.txt'));
+	var reader = new nReadlines(path.join('./data','ignore.txt'));
 	// read each line and prepare the ListFormat
 	do {
 		var line = reader.next();
@@ -123,7 +123,7 @@ function ondictionary(dict) {
   stopDictionary = createStopDictionary(spell);
 
   // now process the files starting with "page"
-  var fileNames = fs.readdirSync('./src/').filter((word) => word.startsWith('page'));
+  var fileNames = fs.readdirSync('./data/').filter((word) => word.startsWith('page'));
   // Sort by extracting numbers from file names
   fileNames.sort((a, b) => {
 	const numA = parseInt(a.match(/\d+/)[0], 10); // Extract and parse number from 'a'
@@ -148,7 +148,7 @@ function ondictionary(dict) {
  
 function processFile(fileName,spellChecker) {
 	// read the file into lines
-	var reader = new nReadlines(path.join('./src',fileName));
+	var reader = new nReadlines(path.join('./data',fileName));
 	var lineNumber = 0;
 	var fileOK = true;
 	do {

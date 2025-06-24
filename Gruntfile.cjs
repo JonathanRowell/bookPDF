@@ -5,17 +5,25 @@ module.exports = function(grunt) {
 	pkg: grunt.file.readJSON('package.json'),
 	
 	clean: {
-		build: {
+		start: {
 			src: ['tmp','pdf','fonts']
+		},
+		build: {
+			src: ['tmp','pdf']
 		}
 	},
 	
 	mkdir: {
 		all: {
 			options: {
-				create: ['data','src', 'pdf','fonts']
+				create: ['data','src', 'pdf','fonts','tmp']
 			},
 		},
+		one: {
+			options: {
+				create: ['tmp']
+			},
+		}
 	},
 	
 	copy: {
@@ -47,6 +55,7 @@ module.exports = function(grunt) {
 	},
 	exec: {
         spell: "node src/spellcheck.js",
+		print: "node src/makeprintfile.js",
 		build: "node makePDF.js"
     }
   });
@@ -59,6 +68,7 @@ module.exports = function(grunt) {
   
   // Default task.
   grunt.registerTask('build', ['exec:build','copy:back']);
-  grunt.registerTask('default', ['clean:build', 'mkdir','copy:main','copy:spell','copy:fonts','exec:spell']);
+  grunt.registerTask('print', ['clean:build','mkdir:one','exec:print']);
+  grunt.registerTask('default', ['clean:start', 'mkdir:all','copy:main','copy:spell','copy:fonts','exec:spell']);
 
 };

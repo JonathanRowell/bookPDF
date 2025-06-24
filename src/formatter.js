@@ -38,7 +38,7 @@ function validClosing(entry,code) {
 	return (entry[0]==='<')&&(entry.length===4)&&(entry[3]==='>')&&(entry[2]===code)&&(entry[1]==='/');
 }
 	
-export function generateText(line) {
+export function generateText(line,attrs) {
 	let dirArray = extractDirectives(line);
 //	console.log(dirArray);
 	// This function does not allow embedded directives, like <b><i>.......
@@ -49,7 +49,7 @@ export function generateText(line) {
 		if(validOpening(item)) {
 			if(((i+2)<dirArray.length)&&(validClosing(dirArray[i+2],item[1]))) {
 //				let myObj = {}; myObj[item[1]] = dirArray[i+1];
-				sections.push([item[1],dirArray[i+1]]);
+				sections.push([item[1],dirArray[i+1],attrs]);
 			} else {
 				// invalid sequence
 				console.log('invalid sequence at '+i);

@@ -82,4 +82,4 @@ export function makeContentPages(pageNumber) {
 
 
 // test
-console.log(makeContentPages(3));
+// console.log(makeContentPages(3));

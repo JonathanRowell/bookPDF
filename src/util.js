@@ -1,6 +1,7 @@
 // Utilites
 
 import fs from 'fs';
+import { decode } from 'windows-1252';
 
 const romanHash = {
   I: 1,
@@ -76,6 +77,18 @@ export function getFileNames() {
 }
 
 export function convertFromLatin(buffer) {
+	return decode(new Uint16Array(buffer));
+}
+
+export function toHex(str) {
+    var result = '';
+    for (var i=0; i<str.length; i++) {
+      result += str.charCodeAt(i).toString(16);
+    }
+	return result;
+}
+
+export function convertFromLatinOld(buffer) {
 //	console.log('type of buffer='+typeof buffer);
 	// convert to UTF 16
 	let line = buffer.toString('latin1');
@@ -95,5 +108,5 @@ export function convertFromLatin(buffer) {
 }
 
 const string1 = "Est-ce par peur qu’ils chantent dans le noir?";
-console.log(convertFromLatin(string1));
-console.log(getForwordNames());
+//console.log(convertFromLatin(string1));
+//console.log(getForwordNames());

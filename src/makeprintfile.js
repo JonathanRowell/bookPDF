@@ -6,6 +6,7 @@ import path from 'path';
 import { chomp } from './util.js';
 import { convertFromLatin } from './util.js';
 import { getFileNames } from './util.js';
+import { getForwordNames } from './util.js';
 import { generateText } from './formatter.js';
 import { makeContentPages } from './makeContents.js';
 import nReadlines from 'n-readlines';
@@ -34,14 +35,14 @@ function addPage(writer) {
 	writer.write(STX+crlf);
 }
 	
-function renderLine(writer,line,attrs) {
+function renderLine(writer,how,line,attrs) {
 	var lineAttrs;
 	// clean up the line
 //	line = chomp(line);
-//	line = line.replace(/¬/g,'');
+	line = line.replace(/¬/g,'');
 	if(line.length>0) {
 		// get the data in the form of a list of write items
-		let lineData = generateText(line,attrs);
+		let lineData = generateText(line,how,attrs);
 		if(!lineData) {
 			errCount++;
 			console.log('Cannot generate text data');
@@ -55,7 +56,8 @@ function renderLine(writer,line,attrs) {
 	return true;
 }
 
-function renderForeword(writer,fileName) {
+function renderForeword(writer,fileName,pageNumber) {
+	writer.write(FS+fileName+crlf);
 	// add a newpage
 	addPage(writer);
 	var reader = new nReadlines(path.join('./data',fileName));
@@ -67,19 +69,22 @@ function renderForeword(writer,fileName) {
 		if(!line) {
 			return;	
 		}
+		let how = (lineNumber===1? 'l': 'n');
 		line = chomp(convertFromLatin(line));
 		let testLine = line.toLowerCase();
 		if(testLine.startsWith('<nocenter>')) {
 			delete attrs.align;
+			lineNumber++;
 			continue;
 		}
 		if(testLine.startsWith('<center>')) {
 			attrs.align = 'center';
+			lineNumber++;
 			continue;
 		}
 		if(line.startsWith('~')) { line = line.slice(1,-1); }
 		// render the line
-		if(!renderLine(writer,line,attrs)) {
+		if(!renderLine(writer,how,line,attrs)) {
 			console.log('In file '+fileName+' at line '+lineNumber+': "'+line+'"');
 			return;
 		}
@@ -118,7 +123,7 @@ function renderIndex(writer,pageNumber) {
 			rowStyles: { border: false },
 			columnStyles: ["*", 200 ,"*"],
 			data: printTable
-		}));
+		})+crlf);
 		i=i+cnt;
 		addPageNumber(writer,romanize(pageNumber));
 		if(i<table.length) { addPage(writer); }
@@ -128,6 +133,7 @@ function renderIndex(writer,pageNumber) {
 }
 
 function renderPoem(writer,fileName,pageNumber) {
+	writer.write(FS+fileName+crlf);
 	console.log('Rendering file '+fileName);
 	var reader = new nReadlines(path.join('./data',fileName));
 	// read each line and prepare for rendering
@@ -145,10 +151,12 @@ function renderPoem(writer,fileName,pageNumber) {
 		let testLine = line.toLowerCase();
 		if(testLine.startsWith('<nocenter>')) {
 			delete attrs.align;
+			lineNumber++;
 			continue;
 		}
 		if(testLine.startsWith('<center>')) {
 			attrs.align = 'center';
+			lineNumber++;
 			continue;
 		}
 		// First line is always in Large Font
@@ -157,8 +165,9 @@ function renderPoem(writer,fileName,pageNumber) {
 			if(line.length>0) { line='<l>'+line+'</l>'; }
 		}
 		// render the line
-		if(!renderLine(writer,line,attrs)) {
+		if(!renderLine(writer,'n',line,attrs)) {
 			console.log('In file '+fileName+' at line '+lineNumber+': "'+line+'"');
+			errCount++;
 			return;
 		}
 		lineNumber++;
@@ -202,7 +211,7 @@ function getWriter(processFunc,finishFunc) {
 }
 
 function renderForewords(writer) {
-	let fileNames = getFileNames();
+	let fileNames = getForwordNames();
 	let pageNumber = 1;
 	fileNames.forEach(function(fileName) {
 		renderForeword(writer,fileName,pageNumber);

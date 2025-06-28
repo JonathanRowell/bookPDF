@@ -53,14 +53,14 @@ do {
 	}
 	let line = chomp(buff.toString());
 	lineNumber++;
-	if(line.length===0) { break; }  // blank line in PDF file
+	if(line.length===0) { continue; }  // blank line in PDF file
 	// switch on the first character
 	switch(line[0]) {
 		case FS : // Just a file name for a comment
 			assert(line.length>1,"missing file name in comment");
 			break;
 		case US : // pageNumber in text form
-			assert(line.length<2,"missing page number");
+			assert(line.length>1,"missing page number "+'"'+line+'"');
 			break;
 		case STX : // new page
 //			console.log(Buffer.from(line).toString('hex'));
@@ -72,6 +72,19 @@ do {
 			break;
 		case GS : //Print line
 			let gsJson = decodeJSON(line.slice(1));
+			assert(Array.isArray(gsJson),"GS argument is not an array");
+			gsJson.forEach(function(entry,index) {
+				assert(Array.isArray(entry),"GS array element is NOT an array at "+index);
+			});
+			gsJson.forEach(function(entry,index) {
+				assert(entry.length===3,"GS array element "+index+" is not length 3 but "+entry.length);
+			});
+			gsJson.forEach(function(entry,index) {
+				assert(entry[0].length===1,"GS array element "+index+" font length is not 1 but "+entry[0].length);
+			});
+			gsJson.forEach(function(entry,index) {
+				assert(typeof entry[1]==='string',"GS array element "+index+" isnot a string but "+typeof entry[1]);
+			});
 			// assert something about the JSON data
 			break;
 		default : // illegal starting character
@@ -82,9 +95,9 @@ do {
 
 
 if(errCount>0) {
-	console.log(errCount + ' Errors found');
+	console.log(errCount + ' Errors found, '+lineNumber+' lines processed');
 	process.exit(1);
 } else {
-	console.log('No errors found');
+	console.log('No errors found '+lineNumber+' lines processed');
 	process.exit(0);
 }

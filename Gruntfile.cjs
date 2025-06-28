@@ -17,11 +17,16 @@ module.exports = function(grunt) {
 		all: {
 			options: {
 				create: ['data','src', 'pdf','fonts','tmp']
-			},
+			}
 		},
-		one: {
+		tmp: {
 			options: {
 				create: ['tmp']
+			}
+		},
+		pdf: {
+			options: {
+				create: ['pdf']
 			},
 		}
 	},
@@ -56,7 +61,8 @@ module.exports = function(grunt) {
 	exec: {
         spell: "node src/spellcheck.js",
 		print: "node src/makeprintfile.js",
-		build: "node makePDF.js"
+		check: "node src/checkprintfile.js",
+		build: "node src/buildpdf.js"
     }
   });
 
@@ -67,8 +73,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-exec");
   
   // Default task.
-  grunt.registerTask('build', ['exec:build','copy:back']);
-  grunt.registerTask('print', ['clean:build','mkdir:one','exec:print']);
+  grunt.registerTask('build', ['mkdir:pdf','exec:build','copy:back']);
+  grunt.registerTask('check', ['exec:check']);
+  grunt.registerTask('print', ['clean:build','mkdir:tmp','exec:print']);
   grunt.registerTask('default', ['clean:start', 'mkdir:all','copy:main','copy:spell','copy:fonts','exec:spell']);
 
 };

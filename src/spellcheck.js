@@ -9,6 +9,7 @@ import nReadlines from 'n-readlines';
 import nspell from 'nspell';
 import NlpjsTFr from 'nlp-js-tools-french';
 import { chomp } from './util.js';
+import { convertFromLatin } from './util.js';
 
 //const dictionary = require('dictionary-fr');
 import dictionaryFr from 'dictionary-fr';
@@ -158,7 +159,7 @@ function processFile(fileName,spellChecker) {
 			// end of this file
 			return;
 		}
-		var line = buff.toString('latin1');
+		var line = convertFromLatin(buff);;
 		lineNumber++;
 		var gaps = countSpaceGaps(line);
 		if(gaps>0) {

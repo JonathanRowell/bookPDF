@@ -24,7 +24,7 @@ function extractDirectives(line) {
 	// validate the directives
 	if(ret[0].length===0) { ret.shift(); }
 	if(ret[ret.length-1].length===0) { ret.pop(); }
-//	console.log(ret);
+	console.log(ret);
 	return ret;
 }
 	
@@ -38,7 +38,7 @@ function validClosing(entry,code) {
 	return (entry[0]==='<')&&(entry.length===4)&&(entry[3]==='>')&&(entry[2]===code)&&(entry[1]==='/');
 }
 	
-export function generateText(line,attrs) {
+export function generateText(line,how,attrs) {
 	let dirArray = extractDirectives(line);
 //	console.log(dirArray);
 	// This function does not allow embedded directives, like <b><i>.......
@@ -62,7 +62,7 @@ export function generateText(line,attrs) {
 				console.log('invalid open/close at '+i);
 				return null;
 			}
-			sections.push(['n',item]);	// text node
+			sections.push([how,dirArray[i],attrs]);	// text node
 			i++;
 		}
 	}
@@ -70,7 +70,7 @@ export function generateText(line,attrs) {
 }
 
 // test
-/* const string1 = 'this simple the<b>html string</b> text test that<b>need</b>to<b>spl</b>it it too';
+const string1 = 'this simple the<b>html string</b> text test that<b>need</b>to<b>spl</b>it it too';
 const string2 = 'This is in <b>bold</b>, <i>italic</i> and the ends normally';
 const string3 = '<b>bold</b>';
 const string4 = 'The quick brown fox jumped over the lazy dog';
@@ -79,12 +79,13 @@ const string4 = 'The quick brown fox jumped over the lazy dog';
 //console.log(extractDirectives(string3));
 //console.log(extractDirectives(string4));
 
-console.log(generateText(extractDirectives(string1)));
-console.log(generateText(extractDirectives(string2)));
-console.log(generateText(extractDirectives(string3)));
-console.log(generateText(extractDirectives(string4)));
-console.log(generateText(extractDirectives('\r\n')));
- */
+/*
+console.log(generateText(string1,'n',{}));
+console.log(generateText(string2,'n',{}));
+console.log(generateText(string3,'n',{}));
+console.log(generateText(string4,'n',{}));
+//console.log(generateText('\r\n','n',{}));
  
-console.log(generateText('<l>REMERCIEMENT</l>no'));
-
+//console.log(extractDirectives(string1));
+console.log(generateText('<l>REMERCIEMENT</l>no','n',{}));
+*/

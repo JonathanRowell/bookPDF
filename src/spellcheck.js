@@ -175,11 +175,29 @@ function processFile(fileName,spellChecker) {
 			console.log('"'+line+'"');
 			console.log('Warning in file "'+fileName+'" at line '+lineNumber+' space at the end of the line');
 		}
-/* 		if(line.indexOf("\x92")>0) {
-			console.log('"'+line+'"');
-			console.log('Warning in file "'+fileName+'" at line '+lineNumber+' contains a "92" right quotation mark');
-		}
- */		
+		// report misplaced quotation marks
+		let posn = 0;
+		do {
+			posn = line.indexOf("\u2019",posn);
+			if(posn===-1) { break; }
+			if(posn===line.length-1) {
+				console.log('"'+line+'"');
+				console.log('Error in file "'+fileName+'" at line '+lineNumber+' right quotation mark at end of line');
+			}
+			if(posn===0) {
+				console.log('"'+line+'"');
+				console.log('Error in file "'+fileName+'" at line '+lineNumber+' right quotation mark at beginning of line');
+			}	
+			if(line[posn-1]===' ') {
+				console.log('"'+line+'"');
+				console.log('Error in file "'+fileName+'" at line '+lineNumber+' space before right quotation mark');
+			}	
+			if(line[posn+1]===' ') {
+				console.log('"'+line+'"');
+				console.log('Error in file "'+fileName+'" at line '+lineNumber+' space after right quotation mark');
+			}
+			posn++
+		} while(true);
 		// report misplaced - signs
 		let minus = line.indexOf('-');
 		if((minus!==-1)&&(minus>1)&&(minus+1<line.length)) {

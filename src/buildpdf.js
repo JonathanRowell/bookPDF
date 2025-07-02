@@ -95,6 +95,7 @@ function printPageNumber(doc,pageNumberTxt) {
 	const OneCM = 28.3464;
 	// This bit from https://github.com/foliojs/pdfkit/issues/1240
 	let posn = Math.round(doc.page.pageHeight-OneCM-doc._fontSize/2);
+	setFontAndSize(doc,'n');
 	doc.text(pageNumberTxt, doc.page.width/2, doc.page.height - doc.page.margins.bottom, {lineBreak: false, align: 'center'});
 }
 
@@ -173,6 +174,12 @@ function openPrintFile(doc) {
 			break;
 		case RS : // A JSON table
 			let usJson = decodeJSON(line.slice(1));
+			if(usJson.options) {
+				usJson.options.prepareRow = (row, i) => setFontAndSize(doc,'n');
+			} else {
+				usJson.options = {prepareRow: (row, i) => setFontAndSize(doc,'n')};
+			}
+			setFontAndSize(doc,'n');
 			doc.table(usJson);
 			break;
 		case GS : //Print line

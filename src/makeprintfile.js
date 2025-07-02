@@ -67,6 +67,7 @@ function renderForeword(writer,fileName,pageNumber) {
 	do {
 		var line = reader.next();
 		if(!line) {
+			addPageNumber(writer,romanize(pageNumber));
 			return;	
 		}
 		let how = (lineNumber===1? 'l': 'n');
@@ -111,7 +112,7 @@ function renderIndex(writer,pageNumber) {
 	writer.write(crlf);
 	// now render the pages of index
 	console.log(table);
-	let i=0; let j=0; let cnt=21;
+	let i=0; let j=0; let cnt=23;
 	while(i<table.length) {
 		let printTable = [];
 		j=0;
@@ -124,11 +125,11 @@ function renderIndex(writer,pageNumber) {
 			columnStyles: ["*", 200 ,"*"],
 			data: printTable
 		})+crlf);
-		i=i+cnt;
+		i=i+1+cnt;
 		addPageNumber(writer,romanize(pageNumber));
 		if(i<table.length) { addPage(writer); }
 		pageNumber++;
-		cnt=23;
+		cnt=25;
 	}
 }
 

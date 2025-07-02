@@ -35,7 +35,7 @@ function isNumeric(value) {
 }
 
 function splitWords(string) { 
-	return string.split(/\s/).filter(i => i !== '') 
+	return string.split(/\s/).filter(i => i !== '');
 }
 
 function deleteNotSections(line,lineNumner,page) {
@@ -159,7 +159,7 @@ function processFile(fileName,spellChecker) {
 			// end of this file
 			return;
 		}
-		var line = convertFromLatin(buff);;
+		var line = convertFromLatin(buff);
 		lineNumber++;
 		var gaps = countSpaceGaps(line);
 		if(gaps>0) {
@@ -196,7 +196,7 @@ function processFile(fileName,spellChecker) {
 				console.log('"'+line+'"');
 				console.log('Error in file "'+fileName+'" at line '+lineNumber+' space after right quotation mark');
 			}
-			posn++
+			posn++;
 		} while(true);
 		// report misplaced - signs
 		let minus = line.indexOf('-');
@@ -212,6 +212,7 @@ function processFile(fileName,spellChecker) {
 		var done = false;
 		var nlpToolsFr = new NlpjsTFr(chomp(line), config);	
 		var tokens = nlpToolsFr.posTagger();
+		/*jshint -W083 */
 		tokens.forEach(function check(token,index) {
 			if(isNumeric(token.word)) { return; }
 			if(spellChecker.correct(token.word)) { return; }
@@ -225,7 +226,7 @@ function processFile(fileName,spellChecker) {
 				done=true;
 				fileOK=false;
 			}
-			var suggestion = spellChecker.suggest(token.word);
+			suggestion = spellChecker.suggest(token.word);
 			var txt = (suggestion&&(suggestion.length>0)?', suggest '+suggestion : '');
 			console.log('Error in file "'+fileName+'" at line '+lineNumber+':1 "'+token.word+'"'+txt);
 			errCount++;

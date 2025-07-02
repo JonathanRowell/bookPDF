@@ -43,7 +43,7 @@ export function generateText(line,how,attrs) {
 //	console.log(dirArray);
 	// This function does not allow embedded directives, like <b><i>.......
 	let i = 0;
-	let sections = []
+	let sections = [];
 	while(i<dirArray.length) {
 		let item = dirArray[i];
 		if(validOpening(item)) {

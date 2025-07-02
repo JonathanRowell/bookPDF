@@ -30,7 +30,12 @@ module.exports = function(grunt) {
 			},
 		}
 	},
-	
+	jshint: {
+		options: {
+			esversion: 6
+		},
+		all: ['Gruntfile.js', 'src/*.js', 'test/*.js']
+	},
 	copy: {
 		main: {
 			// copy into this VM
@@ -71,11 +76,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mkdir');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks("grunt-exec");
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   
   // Default task.
-  grunt.registerTask('build', ['mkdir:pdf','exec:build','copy:back']);
-  grunt.registerTask('check', ['exec:check']);
-  grunt.registerTask('print', ['clean:build','mkdir:tmp','exec:print']);
+  grunt.registerTask('build',   ['mkdir:pdf','exec:build','copy:back']);
+  grunt.registerTask('check',   ['exec:check']);
+  grunt.registerTask('print',   ['clean:build','mkdir:tmp','exec:print']);
   grunt.registerTask('default', ['clean:start', 'mkdir:all','copy:main','copy:spell','copy:fonts','exec:spell']);
+  grunt.registerTask('hint',    ['jshint']);
 
 };

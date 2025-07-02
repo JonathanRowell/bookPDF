@@ -75,7 +75,7 @@ export function makeContentPages(pageNumber) {
 			list.push(reply);
 			if(reply.verse) { verseNumber++; }
 		}
-		pageNumber++
+		pageNumber++;
 	});
 	return list;
 }

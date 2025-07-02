@@ -175,8 +175,10 @@ function openPrintFile(doc) {
 		case RS : // A JSON table
 			let usJson = decodeJSON(line.slice(1));
 			if(usJson.options) {
+				/*jshint -W083 */
 				usJson.options.prepareRow = (row, i) => setFontAndSize(doc,'n');
 			} else {
+				/*jshint -W083 */
 				usJson.options = {prepareRow: (row, i) => setFontAndSize(doc,'n')};
 			}
 			setFontAndSize(doc,'n');

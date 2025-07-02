@@ -73,15 +73,19 @@ do {
 		case GS : //Print line
 			let gsJson = decodeJSON(line.slice(1));
 			assert(Array.isArray(gsJson),"GS argument is not an array");
+			/*jshint -W083 */
 			gsJson.forEach(function(entry,index) {
 				assert(Array.isArray(entry),"GS array element is NOT an array at "+index);
 			});
+			/*jshint -W083 */
 			gsJson.forEach(function(entry,index) {
 				assert(entry.length===3,"GS array element "+index+" is not length 3 but "+entry.length);
 			});
+			/*jshint -W083 */
 			gsJson.forEach(function(entry,index) {
 				assert(entry[0].length===1,"GS array element "+index+" font length is not 1 but "+entry[0].length);
 			});
+			/*jshint -W083 */
 			gsJson.forEach(function(entry,index) {
 				assert(typeof entry[1]==='string',"GS array element "+index+" isnot a string but "+typeof entry[1]);
 			});
